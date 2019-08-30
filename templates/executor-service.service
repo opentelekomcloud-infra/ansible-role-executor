@@ -1,0 +1,34 @@
+[Unit]
+Description=Executor Podman container
+Wants=syslog.service
+
+[Service]
+Type=simple
+Restart=always
+TimeoutSec=30s
+User=executor
+Group=executor
+Environment=EXECUTOR_IMAGE=agoncharov/task_executor
+EnvironmentFile=/home/executor/env
+
+ExecStartPre=-/usr/bin/podman system migrate
+ExecStartPre=-/usr/bin/podman rm "executor"
+
+ExecStart=/bin/sh -c "/usr/bin/podman run \
+  --add-host=telegraf:$(ifconfig $(ip route | awk '/default/ { print $5 }') | grep 'inet ' | awk '{print $2}') \
+  --name executor \
+  -e EXECUTOR_REPO_URL=${EXECUTOR_REPO_URL} \
+  -e OS_CLOUD=cloud_project_scope \
+  -v ~executor/.config/openstack:/etc/openstack:ro \
+  -v /etc/apimon_executor:/etc/apimon_executor:Z \
+  -v /var/log/executor:/var/log/executor:Z \
+  ${EXECUTOR_IMAGE}"
+
+ExecReload=-/usr/bin/podman stop -t 300 "executor"
+ExecReload=-/usr/bin/podman rm "executor"
+
+ExecStop=/usr/bin/podman stop -t 300 "executor"
+ExecStop=/usr/bin/podman rm "executor"
+
+[Install]
+WantedBy=multi-user.target
