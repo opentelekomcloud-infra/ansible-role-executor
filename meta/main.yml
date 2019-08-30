@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: apimon_executor
   author: Artem Goncharov
   description: Provision APImon executor as a Podman container
   company: OpenTelekomCloud
