@@ -41,6 +41,8 @@
   file:
     dest: "{{ executor_config_dir }}"
     state: directory
+    owner: "{{ executor_os_user }}"
+    group: "{{ executor_os_group }}"
 
 - name: Write clouds.yaml
   become: true
