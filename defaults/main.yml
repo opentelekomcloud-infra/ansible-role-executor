@@ -30,7 +30,7 @@ executor_systemd_unit_path: "{{ ('/etc/systemd/system/' + executor_systemd_servi
 
 executor_config_dir: "/etc/apimon_executor"
 executor_config_location: "{{ executor_config_dir }}/executor.yaml"
-executor:log_config_location: "{{ executor_config_dir }}/logging.conf"
+executor_log_config_location: "{{ executor_config_dir }}/logging.conf"
 
 
 executor_apimon_repo_url: "https://githib.com/opentelekomcloud-infra/apimon-tests"
