@@ -9,7 +9,7 @@ TimeoutSec=30s
 User=executor
 Group=executor
 Environment=EXECUTOR_IMAGE=agoncharov/task_executor
-EnvironmentFile=/home/executor/env
+EnvironmentFile=/etc/apimon_executor/env
 
 ExecStartPre=-/usr/bin/podman system migrate
 ExecStartPre=-/usr/bin/podman rm "executor"
@@ -19,7 +19,7 @@ ExecStart=/bin/sh -c "/usr/bin/podman run \
   --name executor \
   -e EXECUTOR_REPO_URL=${EXECUTOR_REPO_URL} \
   -e OS_CLOUD=cloud_project_scope \
-  -v ~executor/.config/openstack:/etc/openstack:ro \
+  -v ~executor/.config/openstack:/etc/openstack:ro,z \
   -v /etc/apimon_executor:/etc/apimon_executor:Z \
   -v /var/log/executor:/var/log/executor:Z \
   --tmpfs /tmp:rw,size=787448k \
