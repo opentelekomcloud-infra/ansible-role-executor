@@ -39,7 +39,7 @@
 - name: Create executor config dir
   become: true
   file:
-    dest: /etc/apimon_executor
+    dest: "{{ executor_config_dir }}"
     state: directory
 
 - name: Write clouds.yaml
@@ -61,14 +61,14 @@
   become_user: "{{ executor_os_user }}"
   copy:
     src: logging.conf
-    dest: /etc/apimon_executor/logging.conf
+    dest: "{{ executor_log_config_location }}"
 
 - name: Write executor config
   become: true
   become_user: "{{ executor_os_user }}"
   template:
     src: executor.yaml.j2
-    dest: /etc/apimon_executor/executor.yaml
+    dest: "{{ executor_config_location }}"
 
 - name: Enable Executor Systemd service
   become: true

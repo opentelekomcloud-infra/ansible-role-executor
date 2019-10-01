@@ -28,6 +28,11 @@ executor_apimon_repo_dest: "~executor/apimon"
 executor_systemd_service_name: "executor-service.service"
 executor_systemd_unit_path: "{{ ('/etc/systemd/system/' + executor_systemd_service_name ) }}"
 
+executor_config_dir: "/etc/apimon_executor"
+executor_config_location: "{{ executor_config_dir }}/executor.yaml"
+executor:log_config_location: "{{ executor_config_dir }}/logging.conf"
+
+
 executor_apimon_repo_url: "https://githib.com/opentelekomcloud-infra/apimon-tests"
 executor_apimon_repo_ref: "master"
 executor_apimon_repo_location: "playbooks"

@@ -1,2 +1,3 @@
 EXECUTOR_REPO_URL={{ apimon_repo }}
 EXECUTOR_IMAGE={{ executor_image }}
+EXECUTOR_CONFIG={{ executor_config_location }}
