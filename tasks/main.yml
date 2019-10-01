@@ -4,14 +4,14 @@
 - name: Create executor group
   become: yes
   group:
-    name: executor
+    name: "{{ executor_os_group }}"
     state: present
 
 - name: Create executor user
   become: true
   user:
-    name: executor
-    group: executor
+    name: "{{ executor_os_user }}"
+    group: "{{ executor_os_group }}"
     state: present
 
 - name: Write Executor Systemd unit file
@@ -22,7 +22,7 @@
 
 - name: Create ~executor/.config/openstack dir
   become: true
-  become_user: executor
+  become_user: "{{ executor_os_user }}"
   file:
     dest: "~executor/.config/openstack/"
     state: directory
@@ -33,8 +33,8 @@
   file:
     dest: /var/log/executor
     state: directory
-    owner: executor
-    group: executor
+    owner: "{{ executor_os_user }}"
+    group: "{{ executor_os_group }}"
 
 - name: Create executor config dir
   become: true
@@ -44,32 +44,35 @@
 
 - name: Write clouds.yaml
   become: true
-  become_user: executor
+  become_user: "{{ executor_os_user }}"
   copy:
     content: "{{ clouds_yaml_content }}"
     dest: "~executor/.config/openstack/clouds.yaml"
 
 - name: Write env
   become: true
-  become_user: executor
+  become_user: "{{ executor_os_user }}"
   template:
     src: "env"
     dest: "~executor/env"
 
 - name: Write logging config
   become: true
+  become_user: "{{ executor_os_user }}"
   copy:
     src: logging.conf
     dest: /etc/apimon_executor/logging.conf
 
 - name: Write executor config
   become: true
+  become_user: "{{ executor_os_user }}"
   template:
     src: executor.yaml.j2
     dest: /etc/apimon_executor/executor.yaml
 
 - name: Enable Executor Systemd service
   become: true
+  become_user: "{{ executor_os_user }}"
   systemd:
     name: "{{ executor_systemd_service_name }}"
     enabled: true
