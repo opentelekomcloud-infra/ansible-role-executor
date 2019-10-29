@@ -56,7 +56,7 @@
   become_user: "{{ executor_os_user }}"
   template:
     src: "env"
-    dest: "{{ executor_config_location }}/env"
+    dest: "{{ executor_config_dir }}/env"
 
 - name: Write logging config
   become: true

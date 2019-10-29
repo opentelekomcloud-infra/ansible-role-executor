@@ -1,10 +1,11 @@
 ---
-executor:
-  repo: {{ executor_apimon_repo_url }}
-  git_checkout_dir: wrk
-  git_ref: {{ executor_apimon_repo_ref }}
-  git_refresh_interval: 2
-  location: {{ executor_apimon_repo_location }}
-  count_executor_threads: 8
-  log_config: /etc/apimon_executor/logging.conf
-  log_dest: /var/log/executor/jobs
+ executor:
+   projects:
+     - name: apimon
+       repo_url: {{ executor_apimon_repo_url }}
+       repo_ref: {{ executor_apimon_repo_ref }}
+       scenarios_location: {{ executor_apimon_repo_location }}
+   refresh_interval: 2
+   count_executor_threads: 8
+   log_config: /usr/app/task_executor/etc/logging.conf
+   log_dest: /var/log/executor/jobs
