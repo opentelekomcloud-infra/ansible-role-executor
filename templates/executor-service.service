@@ -13,6 +13,7 @@ EnvironmentFile=/etc/apimon_executor/env
 
 ExecStartPre=-/usr/bin/podman system migrate
 ExecStartPre=-/usr/bin/podman rm "executor"
+ExecStartPre=-/usr/bin/podman pull ${EXECUTOR_IMAGE}
 
 ExecStart=/bin/sh -c "/usr/bin/podman run \
   --add-host=telegraf:$(ifconfig $(ip route | awk '/default/ { print $5 }') | grep 'inet ' | awk '{print $2}') \

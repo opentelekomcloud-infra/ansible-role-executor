@@ -36,4 +36,3 @@ executor_log_config_location: "{{ executor_config_dir }}/logging.conf"
 executor_apimon_repo_url: "https://githib.com/opentelekomcloud-infra/apimon-tests"
 executor_apimon_repo_ref: "master"
 executor_apimon_repo_location: "playbooks"
-
