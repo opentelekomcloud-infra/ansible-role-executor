@@ -9,7 +9,8 @@
    count_executor_threads: 8
    log:
      config: /usr/app/task_executor/etc/logging.conf
-     fs:
-       dest: /var/log/executor/jobs
-       archive: True
-       keep: True
+     jobs:
+       fs:
+         dest: /var/log/executor/jobs
+         archive: True
+         keep: True
