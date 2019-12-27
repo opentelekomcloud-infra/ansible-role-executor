@@ -23,6 +23,8 @@ executor_host_metadata:
   host-type: executor
 executor_host_data_volume_metadata:
   host-type: executor
+executor_host_var_volume_metadata:
+  host-type: executor
 
 executor_os_user: executor
 executor_os_group: executor
