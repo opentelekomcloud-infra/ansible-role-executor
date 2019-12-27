@@ -57,6 +57,8 @@
   template:
     src: "env"
     dest: "{{ executor_config_dir }}/env"
+  notify:
+    - restart executor
 
 - name: Write logging config
   become: true
@@ -64,6 +66,8 @@
   copy:
     src: logging.conf
     dest: "{{ executor_log_config_location }}"
+  notify:
+    - restart executor
 
 - name: Write executor config
   become: true
@@ -72,6 +76,8 @@
     src: executor.yaml.j2
     dest: "{{ executor_config_location }}"
   when: executor_config_content is not defined
+  notify:
+    - restart executor
 
 - name: Write executor config
   become: true
@@ -80,11 +86,5 @@
     content: "{{ executor_config_content }}"
     dest: "{{ executor_config_location }}"
   when: (executor_config_content is defined) and (executor_config_content|length > 0)
-
-- name: Enable Executor Systemd service
-  become: true
-  systemd:
-    name: "{{ executor_systemd_service_name }}"
-    enabled: true
-    state: "started"
-    daemon_reload: true
+  notify:
+    - restart executor
