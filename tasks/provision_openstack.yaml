@@ -1,5 +1,5 @@
 ---
-# tasks file for infra_xxx
+# tasks file for apimon_executor
 
 - when: executor_host_state != 'absent'
   block:
@@ -15,6 +15,18 @@
         wait: true
       when: executor_host_data_volume_size is defined
       register: data_volume
+
+    - name: Create Var Volume {{ executor_host_var_volume_name }}
+      os_volume:
+        state: "{{ executor_host_state }}"
+        name: "{{ executor_host_var_volume_name }}"
+        size: "{{ executor_host_var_volume_size }}"
+        volume_type: "{{ executor_host_var_volume_type | default(omit) }}"
+        availability_zone: "{{ executor_host_availability_zone }}"
+        metadata: "{{ executor_host_var_volume_metadata }}"
+        wait: true
+      when: executor_host_var_volume_size is defined
+      register: var_volume
 
     - name: Create server {{ executor_host_server_name }}
       os_server:
@@ -32,6 +44,7 @@
         volume_size: "{{ executor_host_root_volume_size }}"
         volumes:
           - "{{ data_volume.id }}"
+          - "{{ var_volume.id }}"
         userdata: |
           #cloud-config
           fqdn: {{ executor_host_server_fqdn }}
@@ -45,14 +58,22 @@
               table_type: 'mbr'
               layout:
                - 100
+            /dev/vdc:
+              table_type: 'mbr'
+              layout:
+               - 100
 
           fs_setup:
             - label: home
               filesystem: ext4
               device: '/dev/vdb1'
+            - label: var
+              filesystem: ext4
+              device: '/dev/vdc1'
 
           mounts:
             - [ "LABEL=home", "/home", "auto", "defaults", "0", "2" ]
+            - [ "LABEL=var", "/var", "auto", "defaults", "0", "2" ]
 
       register: server
 
@@ -64,7 +85,12 @@
         state: absent
         name: "{{ executor_host_server_name }}"
 
-    - name: Delete volume
+    - name: Delete data volume
       os_volume:
         state: absent
         name: "{{ executor_host_data_volume_name }}"
+
+    - name: Delete var volume
+      os_volume:
+        state: absent
+        name: "{{ executor_host_var_volume_name }}"

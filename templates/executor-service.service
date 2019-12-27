@@ -8,7 +8,7 @@ Restart=always
 TimeoutSec=30s
 User=executor
 Group=executor
-Environment=EXECUTOR_IMAGE=agoncharov/task_executor
+Environment=EXECUTOR_IMAGE=otcinfra/task_executor
 EnvironmentFile=/etc/apimon_executor/env
 
 ExecStartPre=-/usr/bin/podman system migrate
@@ -19,10 +19,10 @@ ExecStart=/bin/sh -c "/usr/bin/podman run \
   --add-host=telegraf:$(ifconfig $(ip route | awk '/default/ { print $5 }') | grep 'inet ' | awk '{print $2}') \
   --name executor \
   -e EXECUTOR_REPO_URL=${EXECUTOR_REPO_URL} \
-  -e OS_CLOUD=cloud_project_scope \
   -v ~executor/.config/openstack:/etc/openstack:ro,z \
   -v /etc/apimon_executor:/etc/apimon_executor:Z \
   -v /var/log/executor:/var/log/executor:Z \
+  -v ~executor/tmp:/root/.ansible:z,rw \
   --tmpfs /tmp:rw,size=787448k \
   ${EXECUTOR_IMAGE}"
 
