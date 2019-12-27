@@ -5,7 +5,7 @@ Wants=syslog.service
 [Service]
 Type=simple
 Restart=always
-TimeoutSec=30s
+TimeoutSec=300s
 User=executor
 Group=executor
 Environment=EXECUTOR_IMAGE=otcinfra/task_executor
