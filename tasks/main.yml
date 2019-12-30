@@ -31,7 +31,7 @@
 - name: Write Executor Systemd unit file
   become: true
   template:
-    src: executor-service.service
+    src: executor.service
     dest: "{{ executor_systemd_unit_path }}"
 
 - name: Create required directories
