@@ -34,29 +34,19 @@
     src: executor-service.service
     dest: "{{ executor_systemd_unit_path }}"
 
-- name: Create ~executor/.config/openstack dir
+- name: Create required directories
   become: true
-  become_user: "{{ executor_os_user }}"
   file:
-    dest: "~executor/.config/openstack/"
+    dest: "{{ item.dest }}"
     state: directory
+    owner: "{{ executor_os_user }}"
+    group: "{{ executor_os_group }}"
     recurse: true
-
-- name: Create executor log dir
-  become: true
-  file:
-    dest: /var/log/executor
-    state: directory
-    owner: "{{ executor_os_user }}"
-    group: "{{ executor_os_group }}"
-
-- name: Create executor config dir
-  become: true
-  file:
-    dest: "{{ executor_config_dir }}"
-    state: directory
-    owner: "{{ executor_os_user }}"
-    group: "{{ executor_os_group }}"
+  loop:
+    - {dest: "/var/log/executor"}
+    - {dest: "{{ executor_config_dir }}"}
+    - {dest: "~executor/.config/openstack"}
+    - {dest: "~executor/wrk"}
 
 - name: Write clouds.yaml
   become: true

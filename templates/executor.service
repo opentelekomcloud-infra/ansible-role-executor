@@ -5,7 +5,7 @@ Wants=syslog.service
 [Service]
 Type=simple
 Restart=always
-TimeoutSec=300s
+TimeoutSec=600s
 User=executor
 Group=executor
 Environment=EXECUTOR_IMAGE=otcinfra/task_executor
@@ -26,10 +26,10 @@ ExecStart=/bin/sh -c "/usr/bin/podman run \
   --tmpfs /tmp:rw,size=787448k \
   ${EXECUTOR_IMAGE}"
 
-ExecReload=-/usr/bin/podman stop -t 300 "executor"
+ExecReload=-/usr/bin/podman stop -t 600 "executor"
 ExecReload=-/usr/bin/podman rm "executor"
 
-ExecStop=/usr/bin/podman stop -t 300 "executor"
+ExecStop=/usr/bin/podman stop -t 600 "executor"
 ExecStop=/usr/bin/podman rm "executor"
 
 [Install]
